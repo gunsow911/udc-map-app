@@ -1,9 +1,12 @@
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useAedData } from "@/hooks/useAedData";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 L.Icon.Default.imagePath = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/";
 
 export default function LeafletMap() {
+  const data = useAedData();
+
   return (
     <MapContainer
       style={{ width: "100%", height: "100dvh" }}
@@ -14,9 +17,11 @@ export default function LeafletMap() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={{ lat: 34.18583, lng: 131.47139 }}>
-        <Popup>マーカーテストです。</Popup>
-      </Marker>
+      {data?.map((aed, index) => (
+        <Marker key={index} position={aed.latLng}>
+          <Popup>{aed.name}</Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 }
