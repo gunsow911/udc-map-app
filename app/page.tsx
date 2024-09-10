@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 export default function Home() {
   const LeafletMap = useMemo(
     () =>
-      dynamic(() => import("../components/LeafletMap"), {
+      dynamic(() => import("./LeafletMap"), {
         loading: () => <p>地図をロード中です…</p>,
         ssr: false,
       }),
