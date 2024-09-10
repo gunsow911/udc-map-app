@@ -1,5 +1,5 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { useAedData } from "@/hooks/useAedData";
+import { useAedData } from "./useAedData";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 L.Icon.Default.imagePath = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/";
