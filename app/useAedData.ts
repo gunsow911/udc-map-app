@@ -1,5 +1,5 @@
 import { parse } from "papaparse";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LatLng } from "leaflet";
 
 type Aed = {
@@ -15,32 +15,33 @@ type Aed = {
 export const useAedData = () => {
   const [data, setData] = useState<Aed[]>();
 
-  useEffect(() => {
-    const loadAedData = async () => {
-      const filepath = "/data/aed.csv";
-      const response = await fetch(filepath);
-      const csv = await response.text();
-      const parsedCsv = parse<{ [key: string]: any }>(csv, {
-        header: true,
-        skipEmptyLines: true,
-        dynamicTyping: true,
-      });
+  const loadAedData = useCallback(async () => {
+    const filepath = "/data/aed.csv";
+    const response = await fetch(filepath);
+    const csv = await response.text();
+    const parsedCsv = parse<{ [key: string]: any }>(csv, {
+      header: true,
+      skipEmptyLines: true,
+      dynamicTyping: true,
+    });
 
-      const aedList = parsedCsv.data.map<Aed>((row) => {
-        const latLng = new LatLng(row["緯度"], row["経度"]);
-        const name = row["名称"];
-        const detail = row["設置位置"];
-        const aed: Aed = {
-          latLng: latLng,
-          name: name,
-          detail: detail,
-        };
-        return aed;
-      });
-      setData(aedList);
-    };
-    loadAedData();
+    const aedList = parsedCsv.data.map<Aed>((row) => {
+      const latLng = new LatLng(row["緯度"], row["経度"]);
+      const name = row["名称"];
+      const detail = row["設置位置"];
+      const aed: Aed = {
+        latLng: latLng,
+        name: name,
+        detail: detail,
+      };
+      return aed;
+    });
+    setData(aedList);
   }, []);
+
+  useEffect(() => {
+    loadAedData();
+  }, [loadAedData]);
 
   return data;
 };
